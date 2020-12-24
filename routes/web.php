@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,11 @@ Route::get('/dashboard', function () {
     return view('auth.dashboard');
 })->middleware('auth')->name('dashboard');
 
-Route::get('/hello', function () {
-    return 'hello world';
-});
+
+Route::get('/index', [PostController::class, 'index'])->name('post.index');
+Route::get('/{id}/show', [PostController::class, 'show'])->name('post.show');
+Route::get('/create', [PostController::class, 'create'])->name('post.create');
+Route::post('/store', [PostController::class, 'store'])->name('post.store');
+Route::get('/{id}/edit', [PostController::class, 'edit'])->name('post.edit');
+Route::put('/{id}/update', [PostController::class, 'update'])->name('post.update');
+Route::delete('/{id}/destory', [PostController::class, 'destroy'])->name('post.destory');
