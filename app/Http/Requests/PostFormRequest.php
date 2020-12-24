@@ -26,7 +26,7 @@ class PostFormRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'body'  => 'required|string|max:1000',
-            'img'   => 'mimes:jpeg,png|min:1500|nullable',
+            // 'img'   => 'mimes:jpeg,png|min:1500|nullable',
            'user_id' => 'exists:App\Models\User,id',
         ];
     }

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Post;
+use App\Models\User;
 
 class PostCrudTest extends TestCase
 {
@@ -16,8 +17,17 @@ class PostCrudTest extends TestCase
     {
         parent::setUp();
         $this->withoutExceptionHandling();
+
+       
+        $response = $this->post(route('register'), [
+          'email' => 'email@email.com',
+          'name'  => 'name',
+          'password' => 'password', 
+          'password_confirmation' => 'password',
+          ]);
     }
 
+   
 
    /** @test */
    public function a_create_post_form_can_be_rendered()
@@ -41,6 +51,11 @@ class PostCrudTest extends TestCase
         $response->assertSuccessful();
         $this->assertEquals(1, Post::all()->count());
    }
+
+     
+
+
+          
 
    /** @test */
    public function a_post_can_be_rendered()
@@ -118,5 +133,7 @@ class PostCrudTest extends TestCase
         $this->assertCount(0, Post::all());
 
    }
+
+   
 
 }

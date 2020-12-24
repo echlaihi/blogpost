@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\PostFormRequest;
 use App\Models\Post;
 
 class PostController extends Controller
@@ -31,12 +31,12 @@ class PostController extends Controller
     /**
      * Store a newly created post in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\PostFormRequest  $PostFormRequest
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostFormRequest $PostFormRequest)
     {
-        Post::create($request->all());
+        Post::create($PostFormRequest->all());
     }
 
     /**
@@ -66,14 +66,14 @@ class PostController extends Controller
     /**
      * Update the specified post in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\PostFormRequest  $PostFormRequest
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostFormRequest $PostFormRequest, $id)
     {
         $post = Post::find($id);
-        $post->update($request->all());
+        $post->update($PostFormRequest->all());
         return redirect(back());
     }
 
