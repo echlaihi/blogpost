@@ -25,9 +25,10 @@ Route::get('/dashboard', function () {
 
 
 Route::get('/index', [PostController::class, 'index'])->name('post.index');
-Route::get('/{id}/show', [PostController::class, 'show'])->name('post.show');
 Route::get('/create', [PostController::class, 'create'])->name('post.create');
 Route::post('/store', [PostController::class, 'store'])->name('post.store');
-Route::get('/{id}/edit', [PostController::class, 'edit'])->name('post.edit');
-Route::put('/{id}/update', [PostController::class, 'update'])->name('post.update');
-Route::delete('/{id}/destory', [PostController::class, 'destroy'])->name('post.destory');
+
+Route::get('/{id}/show', [PostController::class, 'show'])->where(['id'=>'[1-9]+'])->name('post.show');
+Route::get('/{id}/edit', [PostController::class, 'edit'])->where(['id'=>'[1-9]+'])->name('post.edit');
+Route::put('/{id}/update', [PostController::class, 'update'])->where(['id'=>'[1-9]+'])->name('post.update');
+Route::delete('/{id}/destory', [PostController::class, 'destroy'])->where(['id'=>'[1-9]+'])->name('post.destory');
