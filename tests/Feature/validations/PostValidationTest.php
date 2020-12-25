@@ -9,6 +9,7 @@ use App\Models\Post;
 
 class PostValidationTest extends TestCase
 {
+    use RefreshDatabase;
     /** @test */
     public function post_id_in_request_must_be_integer()
     {
@@ -20,5 +21,8 @@ class PostValidationTest extends TestCase
         $response->assertStatus(404);
 
     }
+
+   
+    
 
 }

@@ -28,7 +28,11 @@ Route::get('/index', [PostController::class, 'index'])->name('post.index');
 Route::get('/create', [PostController::class, 'create'])->name('post.create');
 Route::post('/store', [PostController::class, 'store'])->name('post.store');
 
-Route::get('/{id}/show', [PostController::class, 'show'])->where(['id'=>'[1-9]+'])->name('post.show');
-Route::get('/{id}/edit', [PostController::class, 'edit'])->where(['id'=>'[1-9]+'])->name('post.edit');
-Route::put('/{id}/update', [PostController::class, 'update'])->where(['id'=>'[1-9]+'])->name('post.update');
-Route::delete('/{id}/destory', [PostController::class, 'destroy'])->where(['id'=>'[1-9]+'])->name('post.destory');
+
+Route::prefix('/post')->name('post.')->where(['id' => '[1-9]+'])->group(function() {
+
+        Route::get('/{id}/show', [PostController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [PostController::class, 'edit'])->name('edit');
+        Route::put('/{id}/update', [PostController::class, 'update'])->name('update');
+        Route::delete('/{id}/destory', [PostController::class, 'destroy'])->name('destory');
+});

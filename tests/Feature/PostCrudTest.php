@@ -65,7 +65,7 @@ class PostCrudTest extends TestCase
 
        // get the post
        $response = $this->get(route('post.show',1));
-
+          
        $response->assertOk();
        $response->assertViewIs('posts.show');
 
