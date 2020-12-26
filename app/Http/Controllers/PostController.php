@@ -42,24 +42,22 @@ class PostController extends Controller
     /**
      * Display the specified post.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        $post = Post::find($id);
         return view('posts.show')->with('post', $post);
     }
 
     /**
      * Show the form for editing the specified post.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        $post = Post::find($id);
         return view('posts.edit')->with('post', $post);
     }
 
@@ -70,9 +68,8 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PostFormRequest $PostFormRequest, $id)
+    public function update(PostFormRequest $PostFormRequest, Post $post)
     {
-        $post = Post::find($id);
         $post->update($PostFormRequest->all());
         return redirect(back());
     }
@@ -80,12 +77,12 @@ class PostController extends Controller
     /**
      * Remove the specified post from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        Post::find($id)->delete();
+        $post->delete();
         return redirect(back());
     }
 }

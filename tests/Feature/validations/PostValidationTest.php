@@ -22,6 +22,14 @@ class PostValidationTest extends TestCase
 
     }
 
+    /** @test */
+    public function the_post_id_passed_in_request_must_belongs_to_a_post_in_database()
+    {
+        $id = 9;
+        $response = $this->get(route('post.show',$id));
+        $response->assertNotFound();
+    }
+
    
     
 

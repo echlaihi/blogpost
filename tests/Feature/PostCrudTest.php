@@ -107,8 +107,8 @@ class PostCrudTest extends TestCase
    public function a_post_can_be_updated()
    {
         $post = Post::factory()->makeOne()->attributesToArray();
-        $this->post(route('post.store'),$post);
 
+        $this->post(route('post.store'),$post);
         $updated_post = Post::factory()->makeOne()->toArray();
         
         $response = $this->put(route('post.update', 1), $updated_post);
