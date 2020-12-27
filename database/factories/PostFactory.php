@@ -25,7 +25,7 @@ class PostFactory extends Factory
             'title'  => $this->faker->sentence(),
             'body'   => $this->faker->text,
             'user_id'=> 1,
-            'img'    => 'noImage.jpg',
+            'img'    => null,
         ];
     }
 }

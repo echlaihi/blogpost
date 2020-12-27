@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostFormRequest;
 use App\Models\Post;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -34,9 +35,21 @@ class PostController extends Controller
      * @param  \Illuminate\Http\PostFormRequest  $PostFormRequest
      * @return \Illuminate\Http\Response
      */
-    public function store(PostFormRequest $PostFormRequest)
+    public function store(PostFormRequest $postFormRequest)
     {
-        Post::create($PostFormRequest->all());
+        
+
+        // handle the image
+        if ($postFormRequest->file('img')){
+
+            $file = $postFormRequest->file('img');
+            Storage::put('public',$file);
+
+            $img = $postFormRequest->file('img')->hashName();
+        }
+
+        Post::create($this->makeDataFromRequest($postFormRequest));
+
     }
 
     /**
@@ -64,13 +77,13 @@ class PostController extends Controller
     /**
      * Update the specified post in storage.
      *
-     * @param  \Illuminate\Http\PostFormRequest  $PostFormRequest
+     * @param  \Illuminate\Http\PostFormRequest  $postFormRequest
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PostFormRequest $PostFormRequest, Post $post)
+    public function update(PostFormRequest $postFormRequest, Post $post)
     {
-        $post->update($PostFormRequest->all());
+        $post->update($this->makeDataFromRequest($postFormRequest));
         return redirect(back());
     }
 
@@ -84,5 +97,20 @@ class PostController extends Controller
     {
         $post->delete();
         return redirect(back());
+    }
+
+    /** 
+     * Return data based on the request
+     *  @param App\Http\Request\PostFormRequest
+     *  @return array
+     */
+    private function makeDataFromRequest(PostFormRequest $postFormRequest)
+    {
+        return [
+            'title'   => $postFormRequest->input('title'),
+            'body'    => $postFormRequest->input('body'),
+            'user_id' => auth()->user()->id,
+            'img'     => $postFormRequest->hasFile('img') ? $postFormRequest->file('img')->hashName() : 'noImage.jpeg',
+        ];
     }
 }
