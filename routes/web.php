@@ -25,14 +25,24 @@ Route::get('/dashboard', function () {
 
 
 Route::get('/index', [PostController::class, 'index'])->name('post.index');
-Route::get('/create', [PostController::class, 'create'])->name('post.create');
-Route::post('/store', [PostController::class, 'store'])->name('post.store');
 
+
+Route::group(['middleware' => ['auth']], function () {
+    
+    Route::get('/create', [PostController::class, 'create'])->name('post.create');
+    Route::post('/store', [PostController::class, 'store'])->name('post.store');
+
+});
 
 Route::prefix('/post')->name('post.')->group(function() {
 
         Route::get('/{post}/show', [PostController::class, 'show'])->name('show');
-        Route::get('/{post}/edit', [PostController::class, 'edit'])->name('edit');
-        Route::put('/{post}/update', [PostController::class, 'update'])->name('update');
-        Route::delete('/{post}/destory', [PostController::class, 'destroy'])->name('destory');
+       
+        Route::group(['middleware' => ['auth']], function () {
+            
+            Route::get('/{post}/edit', [PostController::class, 'edit'])->name('edit');
+            Route::put('/{post}/update', [PostController::class, 'update'])->name('update');
+            Route::delete('/{post}/destory', [PostController::class, 'destroy'])->name('destory');
+            
+        });
 });
