@@ -41,7 +41,7 @@ class PostCrudTest extends TestCase
      }
 
      /** @test  */
-     public function a_post_can_be_stored_in_database()
+     public function a_post_that_has_img_can_be_stored_in_database()
      {
 
           // create a fake image
@@ -54,6 +54,15 @@ class PostCrudTest extends TestCase
           $this->assertEquals(1, Post::all()->count());
           Storage::disk('public')->assertExists($img->hashName());
           $this->assertEquals(Post::first()->img, $img->hashName());
+     }
+
+     /** @test */
+     public function a_post_that_does_not_have_img_can_be_stored_in_database()
+     {
+          $post = Post::factory()->make()->attributesToArray();
+          $response = $this->post(route('post.store'), $post);
+
+          $this->assertCount(1, Post::all());
      }
 
 
