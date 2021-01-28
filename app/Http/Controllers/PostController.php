@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostFormRequest;
 use App\Models\Post;
+use App\Models\User;
+use App\Policies\PostPolicy;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -39,7 +41,6 @@ class PostController extends Controller
     {
         
 
-        // handle the image
         if ($postFormRequest->file('img')){
 
             $file = $postFormRequest->file('img');
@@ -71,6 +72,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorize('manage', $post);
         return view('posts.edit')->with('post', $post);
     }
 
@@ -83,6 +85,7 @@ class PostController extends Controller
      */
     public function update(PostFormRequest $postFormRequest, Post $post)
     {
+        $this->authorize('manage', $post);
         $post->update($this->makeDataFromRequest($postFormRequest));
         return redirect(back());
     }
@@ -95,6 +98,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('manage', $post);
         $post->delete();
         return redirect(back());
     }

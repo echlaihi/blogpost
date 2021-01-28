@@ -12,11 +12,7 @@ class PostAuthorizationTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->withExceptionHandling();
-    }
+   
     /** @test */
     public function guest_user_cannot_crud_the_post()
     {
@@ -37,41 +33,33 @@ class PostAuthorizationTest extends TestCase
     }
 
     /** @test */
-    public function regular_user_cannot_edit_update_destory_post_which_does_not_belongs_to_him()
+    public function regular_user_cannot_edit_update_delete_does_not_belongs_to_him()
     {
 
-        // store 2 user in DB
-        $user1 = User::factory()->create();
-        $user2 = User::factory()->create();
-
-        // store 2 post in DB one has user_id = 1 other has 2
-        $post = Post::factory()->create(['user_id' => 1]);
-        $post2 = Post::factory()->create(['user_id' => 2]);
+        $users = User::factory(2)->create();
+        $post1 = Post::factory()->create(['user_id' => 1, 'img' => 'noImage.jpg']);
+        $post2 = Post::factory()->create(['user_id' => 2, 'img' => 'noImage.jpg']);
 
         $this->assertCount(2, Post::all());
         $this->assertCount(2, User::all());
-      
-        
 
         
-    }
+        $updated_post = Post::factory()->make()->attributesToArray();
 
-    private function createUser($type)
-    {
-        if ($type == 'login'){
-            return [
-                'email' => 'email.email.com',
-                'password' => 'password',
-            ];
+        $authUser = $this->actingAs(User::first());
+        $authUser->assertAuthenticated();
+
+        $responses = array();
+
+        $responses[0] = $authUser->get(route('post.edit', 2));
+        $responses[1] = $authUser->put(route('post.update', 2), $updated_post);
+        $responses[2] = $authUser->delete(route('post.destory', 2));
+
+        foreach($responses as $response){
+            $response->assertForbidden();
         }
 
-         return [
-            'name' => 'name',
-            'email' => 'email.email@com',
-            'password' => 'password',
-            'password_confirmation' => 'password'
-        ];
-
-
     }
+
+  
 }

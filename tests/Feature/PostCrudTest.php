@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,15 +18,11 @@ class PostCrudTest extends TestCase
      protected function setUp(): void
      {
           parent::setUp();
+          $user = User::factory()->createOne();
+          $this->actingAs($user);
+
           $this->withoutExceptionHandling();
 
-
-          $response = $this->post(route('register'), [
-               'email' => 'email@email.com',
-               'name'  => 'name',
-               'password' => 'password',
-               'password_confirmation' => 'password',
-          ]);
      }
 
 
@@ -96,14 +93,11 @@ class PostCrudTest extends TestCase
      }
 
      /** @test */
-     public function edit_post_from_can_be_rendered()
+     public function edit_post_form_can_be_rendered()
      {
-          $this->StorePostInDatabase();
-
-          $response = $this->get(route('post.edit', 1));
-
+          $post = Post::factory(['img' => 'noImage.jpeg'])->createOne();
+          $response = $this->get(route('post.edit',1));
           $response->assertOk();
-          $response->assertViewIs('posts.edit');
      }
 
      /** @test */
@@ -139,5 +133,12 @@ class PostCrudTest extends TestCase
      {
           $post = Post::factory()->makeOne()->attributesToArray();
           $this->post(route('post.store'), $post);
+     }
+
+     private function makeAuthUser()
+     {
+          $user = User::factory()->makeOne();
+          $response = $this->actingAs($user);
+          return $response;
      }
 }
