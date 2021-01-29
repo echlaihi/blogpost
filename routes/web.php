@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::prefix('/post')->name('post.')->group(function() {
 
+
+
         Route::get('/{post}/show', [PostController::class, 'show'])->name('show');
        
         Route::group(['middleware' => ['auth']], function () {
@@ -45,4 +49,12 @@ Route::prefix('/post')->name('post.')->group(function() {
             Route::delete('/{post}/destory', [PostController::class, 'destroy'])->name('destory');
             
         });
+
+});
+
+Route::prefix('/comment')->name('comment.')->group(function () {
+
+    Route::post('/store', [CommentController::class, 'store'])->name('store');
+    Route::delete('{comment}/destory', [CommentController::class, 'destory'])->name('destory');
+    Route::put('{comment}/update', [CommentController::class, 'update'])->name('update');
 });
