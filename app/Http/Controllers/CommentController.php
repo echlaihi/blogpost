@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function index()
+    {
+        $comment = Comment::paginate(1)->toJson();
+        return response()->json($comment);
+    }
     public function store(Request $request)
     {
         Comment::create($this->makeDataFromRequest($request));
@@ -30,6 +35,5 @@ class CommentController extends Controller
             'body'    => $request->input('body'),
         ];
     }
-
 
 }

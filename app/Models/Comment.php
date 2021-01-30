@@ -10,4 +10,5 @@ class Comment extends Model
     use HasFactory;
 
     protected  $fillable = ['body', 'user_id', 'post_id'];
+    protected $hidden = ['user_id', 'post_id', 'id'];
 }

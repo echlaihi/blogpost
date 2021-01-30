@@ -31,7 +31,7 @@ class commentCRUDTest extends TestCase
         $this->assertAuthenticated();
         $comment = Comment::factory(['user_id' => 1, 'post_id' => 1])->makeOne()->attributesToArray();
 
-        $this->post(route('comment.store'), $comment);
+        $this->json('POST',route('comment.store'), $comment);
 
         $this->assertCount(1, Comment::all());
       
@@ -41,7 +41,7 @@ class commentCRUDTest extends TestCase
    public function a_comment_can_be_deleted()
    {
         Comment::factory(['user_id' => 1, 'post_id' => 1])->createOne();
-        $this->delete(route('comment.destory', 1));
+        $this->json('DELETE', route('comment.destory', 1));
 
         $this->assertCount(0, Comment::all());
    }
@@ -50,13 +50,35 @@ class commentCRUDTest extends TestCase
    public function a_comment_can_be_updated()
    {
        $comment = Comment::factory(['user_id' => 1, 'post_id' => 1])->createOne()->attributesToArray();
+
        $updated_comment = [
            'body' => 'updated body',
            'user_id' => $comment['user_id'],
            'post_id' => $comment['post_id'],
        ];
 
-       $this->put(route('comment.update', 1), $updated_comment);
+       $this->json('PUT', route('comment.update', 1), $updated_comment);
        $this->assertEquals(Comment::first()->only(['body', 'user_id', 'post_id']), $updated_comment);
+   }
+
+   /** @test */
+   public function comments_can_be_rendered_in_json_format_and_paginated()
+   {
+
+        $comment = Comment::factory(20)->create(['user_id' => 1, 'post_id' => 1]);
+
+        $response = $this->json('GET', route('comment.index'));
+
+        // $response->assertJsonStructure([
+        //     'data' => ['body', 'created_at', 'updated_at'],
+        //     'first_page_url','from',
+        //     'last_page', 'last_page_url',
+        //     'links' => ['*' => ['active', 'label','url']],
+        //     'next_page_url', 'path','per_page', 'prev_page_url', 'to', 'total',
+        // ]);
+        
+        $response->assertOk();
+        
+
    }
 }
