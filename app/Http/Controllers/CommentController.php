@@ -19,11 +19,13 @@ class CommentController extends Controller
 
     public function destory(Comment $comment)
     {
+        $this->authorize('canManage', $comment);
         $comment->delete();
     }
 
     public function update(Comment $comment, Request $request)
     {
+        $this->authorize('canManage', $comment);
         $comment->update($this->makeDataFromRequest($request));
     }
 
