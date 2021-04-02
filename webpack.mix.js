@@ -2,7 +2,7 @@ const mix = require('laravel-mix');
 
 /*
  |--------------------------------------------------------------------------
- | Mix Asset Management
+ | Mix Asset Manag  ement
  |--------------------------------------------------------------------------
  |
  | Mix provides a clean, fluent API for defining some Webpack build steps

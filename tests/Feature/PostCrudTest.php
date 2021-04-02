@@ -25,8 +25,6 @@ class PostCrudTest extends TestCase
 
      }
 
-
-
      /** @test */
      public function a_create_post_form_can_be_rendered()
      {

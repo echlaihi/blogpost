@@ -29,10 +29,9 @@ class commentCRUDTest extends TestCase
    {
 
         $this->assertAuthenticated();
-        $comment = Comment::factory(['user_id' => 1, 'post_id' => 1])->makeOne()->attributesToArray();
 
+        $comment = Comment::factory()->makeOne()->attributesToArray();
         $this->json('POST',route('comment.store'), $comment);
-
         $this->assertCount(1, Comment::all());
       
    }

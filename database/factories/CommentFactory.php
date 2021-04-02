@@ -22,7 +22,8 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'body' => $this->faker->text
+            'body' => $this->faker->text,
+            'post_id' => 1,
         ];
     }
 }
