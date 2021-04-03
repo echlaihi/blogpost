@@ -13,6 +13,6 @@ class PostPolicy
 
     public function manage(User $user,Post $post)
     {
-        return $post->user_id == $user->id;
+        return ($post->user_id == $user->id) or ($user->is_admin);
     }
 }
