@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    public function index()
+    public function index(Post $post)
     {
-        $comment = Comment::paginate(1)->toJson();
+        $comment = Comment::where('post_id', $post->id)->paginate(1)->toJson();
         return response()->json($comment);
     }
-    public function store(Request $request)
+    public function store(StoreCommentRequest $request)
     {
         Comment::create($this->makeDataFromRequest($request));
     }
@@ -23,7 +25,7 @@ class CommentController extends Controller
         $comment->delete();
     }
 
-    public function update(Comment $comment, Request $request)
+    public function update(Comment $comment, StoreCommentRequest $request)
     {
         $this->authorize('canManage', $comment);
         $comment->update($this->makeDataFromRequest($request));

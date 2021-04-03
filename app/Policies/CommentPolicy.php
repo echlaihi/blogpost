@@ -13,6 +13,6 @@ class CommentPolicy
 
    public function canManage(User $user, Comment $comment)
    {
-       return ($user->id === $comment->user_id) or ($user->isAdmin);
+       return ($user->id == $comment->user_id);// or ($user->isAdmin);
    }
 }

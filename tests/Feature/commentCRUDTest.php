@@ -13,6 +13,7 @@ class commentCRUDTest extends TestCase
 {
     use RefreshDatabase;
 
+
     protected function setUp() : void
     {
         parent::setUp();
@@ -31,33 +32,33 @@ class commentCRUDTest extends TestCase
         $this->assertAuthenticated();
 
         $comment = Comment::factory()->makeOne()->attributesToArray();
-        $this->json('POST',route('comment.store'), $comment);
+        $this->json('POST',route('comment.store', 1), $comment);
         $this->assertCount(1, Comment::all());
       
    }
 
    /** @test */
    public function a_comment_can_be_deleted()
-   {
+   {    
         Comment::factory(['user_id' => 1, 'post_id' => 1])->createOne();
-        $this->json('DELETE', route('comment.destory', 1));
-
+        $response = $this->json('DELETE', route('comment.destory',1));
         $this->assertCount(0, Comment::all());
    }
 
    /** @test */
    public function a_comment_can_be_updated()
    {
+        Post::factory(['img' => 'noImage.jpeg'])->createOne();
        $comment = Comment::factory(['user_id' => 1, 'post_id' => 1])->createOne()->attributesToArray();
 
        $updated_comment = [
-           'body' => 'updated body',
-           'user_id' => $comment['user_id'],
-           'post_id' => $comment['post_id'],
+           'body'    => 'updated body',
+           'user_id' => '1',
+           'post_id' => '1',
        ];
 
-       $this->json('PUT', route('comment.update', 1), $updated_comment);
-       $this->assertEquals(Comment::first()->only(['body', 'user_id', 'post_id']), $updated_comment);
+       $response = $this->json('PUT', route('comment.update',1), $updated_comment);
+       $this->assertSame(Comment::first()->only(['body', 'user_id', 'post_id']), $updated_comment);
    }
 
    /** @test */
@@ -66,7 +67,7 @@ class commentCRUDTest extends TestCase
 
         $comment = Comment::factory(20)->create(['user_id' => 1, 'post_id' => 1]);
 
-        $response = $this->json('GET', route('comment.index'));
+        $response = $this->json('GET', route('comment.index', ['post' => 1, 'comment' => 1]));
 
         // $response->assertJsonStructure([
         //     'data' => ['body', 'created_at', 'updated_at'],

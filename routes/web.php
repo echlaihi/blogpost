@@ -52,11 +52,11 @@ Route::prefix('/post')->name('post.')->group(function() {
 
 });
 
-Route::get('/comment/index', [CommentController::class, 'index'])->name('comment.index');
-Route::prefix('/comment')->name('comment.')->group(function () {
+Route::get('}post}/comment/{comment}/index', [CommentController::class, 'index'])->name('comment.index');
+Route::prefix('/comment/{comment}')->name('comment.')->group(function () {
 
     Route::post('/store', [CommentController::class, 'store'])->name('store');
-    Route::delete('{comment}/destory', [CommentController::class, 'destory'])->name('destory');
-    Route::put('{comment}/update', [CommentController::class, 'update'])->name('update');
+    Route::delete('/destory', [CommentController::class, 'destory'])->name('destory');
+    Route::put('/update', [CommentController::class, 'update'])->name('update');
 
 });
