@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CanManageUserMiddleware;
 
 
 /*
@@ -52,11 +54,17 @@ Route::prefix('/post')->name('post.')->group(function() {
 
 });
 
-Route::get('}post}/comment/{comment}/index', [CommentController::class, 'index'])->name('comment.index');
+Route::get('/comment/{comment}/index', [CommentController::class, 'index'])->name('comment.index');
 Route::prefix('/comment/{comment}')->name('comment.')->group(function () {
 
     Route::post('/store', [CommentController::class, 'store'])->name('store');
     Route::delete('/destory', [CommentController::class, 'destory'])->name('destory');
     Route::put('/update', [CommentController::class, 'update'])->name('update');
 
+});
+
+
+Route::prefix('/users/')->name('user.')->group(function () {
+
+    Route::post('/{user}/update', [UserController::class, 'update'])->name('update')->middleware(['auth']);
 });
