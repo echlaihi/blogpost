@@ -32,7 +32,7 @@ class commentCRUDTest extends TestCase
         $this->assertAuthenticated();
 
         $comment = Comment::factory()->makeOne()->attributesToArray();
-        $this->json('POST',route('comment.store', 1), $comment);
+        $this->json('POST',route('comment.store'), $comment);
         $this->assertCount(1, Comment::all());
       
    }

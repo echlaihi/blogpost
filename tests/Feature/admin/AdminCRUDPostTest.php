@@ -41,4 +41,18 @@ class AdminCRUDPostTest extends TestCase
         $response->assertRedirect();
 
     }
+
+    /**@test
+     */
+    public function admin_can_list_all_post_in_paginated_way()
+    {
+
+    }
+
+    /** @test */
+    public function admin_can_list_all_users_in_paginated_way()
+    {
+
+    }
+
 }

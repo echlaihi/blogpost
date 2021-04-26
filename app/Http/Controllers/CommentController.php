@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
+use App\Notifications\PostCommentedNotification;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -14,9 +16,26 @@ class CommentController extends Controller
         $comment = Comment::where('post_id', $post->id)->paginate(1)->toJson();
         return response()->json($comment);
     }
+
+
     public function store(StoreCommentRequest $request)
     {
-        Comment::create($this->makeDataFromRequest($request));
+        $comment = Comment::create($this->makeDataFromRequest($request));
+
+        // notifications
+        $admins = User::where("is_admin", 1)->get();
+
+        // get the commented post
+        $commented_post = Post::find($request->input("post_id"));
+        
+        $post_owner = User::find( $commented_post->user_id);
+
+        foreach ($admins as $admin){
+            $admin->notify(new PostCommentedNotification($comment));
+        }
+
+        $post_owner->notify(new PostCommentedNotification($comment));
+
     }
 
     public function destory(Comment $comment)

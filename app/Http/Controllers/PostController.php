@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Policies\PostPolicy;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\PostCreatedNotification;
 
 class PostController extends Controller
 {
@@ -49,7 +50,13 @@ class PostController extends Controller
             $img = $postFormRequest->file('img')->hashName();
         }
 
-        Post::create($this->makeDataFromRequest($postFormRequest));
+        $post = Post::create($this->makeDataFromRequest($postFormRequest));
+
+        // notify the admin
+        $admins = User::where("is_admin", 1)->get();
+        foreach ( $admins as $admin ){
+            $admin->notify(new PostCreatedNotification($post));
+        } 
 
     }
 
