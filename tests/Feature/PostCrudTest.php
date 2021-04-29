@@ -45,10 +45,11 @@ class PostCrudTest extends TestCase
 
           $response = $this->post(route('post.store'), $post);
 
-          $response->assertSuccessful();
+          $response->assertRedirect(route('post.show', 1));
           $this->assertEquals(1, Post::all()->count());
           Storage::disk('public')->assertExists($img->hashName());
           $this->assertEquals(Post::first()->img, $img->hashName());
+
      }
 
      /** @test */
@@ -101,18 +102,35 @@ class PostCrudTest extends TestCase
      /** @test */
      public function a_post_can_be_updated()
      {
-          $this->StorePostInDatabase();
+          $post = Post::factory(['img' => 'noImage.jpeg'])->create();
+          $image = UploadedFile::fake()->image("myImage.jpeg", 1000, 100)->size(1000);
 
-          $updated_post = Post::factory()->makeOne()->toArray();
-
+          $updated_post = Post::factory(['img' => $image])->make()->attributesToArray();
+          
           $response = $this->put(route('post.update', 1), $updated_post);
 
-          $updated_post['img'] = 'noImage.jpeg';
 
-          $actual_post = array_slice(Post::first()->toArray(), 1, 4);
+          $this->assertEquals(Post::first()->title, $updated_post['title']);
+          $this->assertEquals(Post::first()->body, $updated_post['body']);
+          $this->assertEquals($image->hashName(), Post::first()->img);
+          $response->assertRedirect(route("post.show", 1));
+     }
 
-          $response->assertRedirect(back());
-          $this->assertTrue($updated_post == $actual_post);
+     /** @test */
+     public function if_the_user_does_not_add_an_image_in_the_edit_form_image_should_not_be_updated()
+     {
+          $post = Post::factory()->make()->attributesToArray();
+          $img = UploadedFile::fake()->image('img.jpg', 1000, 500)->size(1000);
+          $post['img'] = $img;
+
+          $response = $this->post(route("post.store"), $post);
+          $post_updated = Post::factory()->make()->attributesToArray();
+          $response = $this->put(route("post.update", 1), $post_updated);
+
+          $image = Post::first()->only(["img"]);
+          $image = $image["img"];
+
+          $this->assertEquals($image, $img->hashName());
      }
 
      /** @test */

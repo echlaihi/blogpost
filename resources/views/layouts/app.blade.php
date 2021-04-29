@@ -79,5 +79,9 @@
             @yield('content')
         </main>
     </div>
+
+    <footer>
+        <div class="container text-light text-center">footer &copy; copyright 2020</div>
+    </footer>
 </body>
 </html>

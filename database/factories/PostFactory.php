@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker;
 
 class PostFactory extends Factory
 {
@@ -23,7 +24,7 @@ class PostFactory extends Factory
     {
         return [
             'title'  => $this->faker->sentence(),
-            'body'   => $this->faker->text,
+            'body'   => $this->withFaker()->text(50000), 
             'user_id'=> 1,
             'img'    => null,
         ];

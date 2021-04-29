@@ -42,7 +42,7 @@ class PostController extends Controller
     {
         
 
-        if ($postFormRequest->file('img')){
+        if ($postFormRequest->hasFile('img')){
 
             $file = $postFormRequest->file('img');
             Storage::put('public',$file);
@@ -50,13 +50,21 @@ class PostController extends Controller
             $img = $postFormRequest->file('img')->hashName();
         }
 
-        $post = Post::create($this->makeDataFromRequest($postFormRequest));
+
+        $post = Post::create([
+            "title" => $postFormRequest->input("title"),
+            "body"  => $postFormRequest->input("body"),
+            "img"   => isset($img) ? $img : "noImage.jpeg",
+            "user_id" => auth()->user()->id,
+        ]);
 
         // notify the admin
         $admins = User::where("is_admin", 1)->get();
         foreach ( $admins as $admin ){
             $admin->notify(new PostCreatedNotification($post));
         } 
+
+        return redirect(route("post.show", $post->id));
 
     }
 
@@ -93,8 +101,27 @@ class PostController extends Controller
     public function update(PostFormRequest $postFormRequest, Post $post)
     {
         $this->authorize('manage', $post);
-        $post->update($this->makeDataFromRequest($postFormRequest));
-        return redirect(back());
+
+        if ($postFormRequest->hasFile("img")){
+
+            // update the file
+            $image = $postFormRequest->file("img");
+            Storage::put('public', $image);
+            $last_image = $post->img;
+            Storage::delete($last_image);
+            $image = $image->hashName();
+
+            $post->update([
+                'img' => $image,
+            ]);
+        }
+
+        $post->update([
+            'title' => $postFormRequest->input("title"),
+            'body'  => $postFormRequest->input("body"),
+        ]);
+        return redirect(route("post.show", $post->id));  
+
     }
 
     /**
@@ -110,18 +137,5 @@ class PostController extends Controller
         return redirect(back());
     }
 
-    /** 
-     * Return data based on the request
-     *  @param App\Http\Request\PostFormRequest
-     *  @return array
-     */
-    private function makeDataFromRequest(PostFormRequest $postFormRequest)
-    {
-        return [
-            'title'   => $postFormRequest->input('title'),
-            'body'    => $postFormRequest->input('body'),
-            'user_id' => auth()->user()->id,
-            'img'     => $postFormRequest->hasFile('img') ? $postFormRequest->file('img')->hashName() : 'noImage.jpeg',
-        ];
-    }
+
 }

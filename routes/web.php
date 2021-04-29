@@ -18,9 +18,9 @@ use App\Http\Middleware\CanManageUserMiddleware;
 |
 */
 
-Route::get('/', function () {
-     return view('welcome');
-});
+// Route::get('/', function () {
+//      return view('welcome');
+// });
 
 // home route
 Route::get('/dashboard', function () {
@@ -28,13 +28,13 @@ Route::get('/dashboard', function () {
 })->middleware('auth')->name('dashboard');
 
 
-Route::get('/index', [PostController::class, 'index'])->name('post.index');
+Route::get('/', [PostController::class, 'index'])->name('post.index');
 
 
 Route::group(['middleware' => ['auth']], function () {
     
-    Route::get('/create', [PostController::class, 'create'])->name('post.create');
-    Route::post('/store', [PostController::class, 'store'])->name('post.store');
+    Route::get('post/create', [PostController::class, 'create'])->name('post.create');
+    Route::post('post/store', [PostController::class, 'store'])->name('post.store');
 
 });
 

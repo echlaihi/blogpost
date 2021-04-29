@@ -24,10 +24,9 @@ class PostFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'   => 'required|string|max:255',
-            'body'    => 'required|string|max:1000',
-            'img'     => 'nullable|mimes:jpeg,png,jpg|dimensions:max_with=2000,max_height=1000,min_width=700,min_height=500',
-            'user_id' => 'required|integer|exists:App\Models\User,id',
+                'title'   => 'required|string|min:5|max:255',
+                'body'    => 'required|string|min:50|max:50000',
+                // 'img'     => 'nullable|mimes:jpeg,png,jpg|dimensions:max_with=2000,max_height=1000',
         ];
     }
 }
