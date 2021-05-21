@@ -49,24 +49,30 @@ class authenticationTest extends TestCase
   }
 
   /** @test */
-  public function a_user_can_login_and_get_redirected_to_dashboard()
+  public function regualar_user_get_redirected_to_their_profile()
   {
 
-    $this->withoutExceptionHandling();
-    $this->post(route('register'), $this->createUser());
-    
-    $response = $this->post(route('logout'));
-    
-    $this->assertGuest();
-    $response->assertRedirect('/');
+    $user = User::factory(['is_admin' => 0])->create()->only(['email']);
+    $user['password'] = 'password';
 
+    $response = $this->post(route('login'), $user);
+    $this->assertAuthenticated();
+    // $response->assertRedirect(route('profile'));
+    // $response->assertViewIs('auth.profile');
 
-    $response = $this->post(route('login'), ['email'=> 'email@email.com', 'password' => 'password']);
-    $response->assertRedirect(route('dashboard'));
-    $this->assertAuthenticated($guard = null);
-    
   }
 
+  /** @test */
+  public function admins_get_redirected_to_the_admin_area()
+  {
+
+  }
+
+  /** @test */
+  public function regualar_user_connot_access_the_admin_area()
+  {
+
+  }
 
   /** @test */
   public function a_user_can_logout()

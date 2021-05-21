@@ -14,6 +14,24 @@ class AdminCRUDPostTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setup();
+
+        $user = User::factory(['is_admin' => 1])->createOne();
+        $response = $this->actingAs($user);
+
+    }
+
+    /** @test */
+    public function dashboard_panel_can_be_rendered()
+    {
+
+        $response = $this->get(route('dashboard'));
+        $response->assertOk();
+        $response->assertViewIs('admin.dashboard');
+    }
+
     /** @test */
     public function admin_can_delete_any_post()
     {
@@ -42,17 +60,15 @@ class AdminCRUDPostTest extends TestCase
 
     }
 
-    /**@test
+    /** @test
      */
-    public function admin_can_list_all_post_in_paginated_way()
+    public function admin_can_list_all_post()
     {
-
+        $this->withoutExceptionHandling();
+        $response = $this->get(route("dashboard.posts"));
+        $response->assertOk();
     }
 
-    /** @test */
-    public function admin_can_list_all_users_in_paginated_way()
-    {
-
-    }
+  
 
 }

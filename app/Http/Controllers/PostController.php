@@ -11,6 +11,14 @@ use App\Notifications\PostCreatedNotification;
 
 class PostController extends Controller
 {
+
+    public function list()
+    {
+        $posts = Post::paginate(10);
+        return view('admin.tables.posts')->with('posts', $posts);
+
+        return  'hello world';
+    }
     /**
      * Display a listing of the post.
      *

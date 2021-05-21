@@ -3,9 +3,10 @@
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\CanManageUserMiddleware;
-
+use App\Http\Middleware\IsAdminMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,13 +23,11 @@ use App\Http\Middleware\CanManageUserMiddleware;
 //      return view('welcome');
 // });
 
-// home route
-Route::get('/dashboard', function () {
-    return view('auth.dashboard');
-})->middleware('auth')->name('dashboard');
+// the user profile
+Route::get('/dashboard', [DashboardController::class, 'profile'])->middleware('auth')->name('dashboard');
 
 
-Route::get('/', [PostController::class, 'index'])->name('post.index');
+Route::get('/profile', [PageController::class, 'profile'])->middleware('auth')->name('profile');
 
 
 Route::group(['middleware' => ['auth']], function () {
@@ -55,7 +54,7 @@ Route::prefix('/post')->name('post.')->group(function() {
 });
 
 Route::get('/comment/{comment}/index', [CommentController::class, 'index'])->name('comment.index');
-Route::post('comment    /store', [CommentController::class, 'store'])->name('comment.store');
+Route::post('comment/store', [CommentController::class, 'store'])->name('comment.store');
 
 Route::prefix('/comment/{comment}')->name('comment.')->group(function () {
     
@@ -68,4 +67,10 @@ Route::prefix('/comment/{comment}')->name('comment.')->group(function () {
 Route::prefix('/users/')->name('user.')->group(function () {
 
     Route::post('/{user}/update', [UserController::class, 'update'])->name('update')->middleware(['auth']);
+});
+
+// admin routes
+Route::prefix('/admin/dashboard')->name("admin.")->middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 });
