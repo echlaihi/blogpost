@@ -31,21 +31,20 @@ class authenticationTest extends TestCase
              ->assertViewIs('auth.register');
   }
 
-
   /** @test */
-  public function a_user_can_register_and_get_redirected_to_dashboard()
+  public function when_admin_login_redirect_him_to_admin_dashboard()
   {
+    $user = [
+      'email' => 'root@email.com', 
+      'name' => 'name', 
+      'password' => 'password', 
+      'password_confirmation' => 'password',
+    ];
 
-    // $this->withoutExceptionHandling();
-
-    $response = $this->post(route('register'), $this->createUser());
-
-
-    $this->assertEquals(1, User::all()->count());
-    
+    $response = $this->post(route('register', $user));
+    $this->assertAuthenticated();
     $response->assertRedirect(route('dashboard'));
-    $this->assertAuthenticated($guard = null);
-    
+
   }
 
   /** @test */
@@ -57,22 +56,10 @@ class authenticationTest extends TestCase
 
     $response = $this->post(route('login'), $user);
     $this->assertAuthenticated();
-    // $response->assertRedirect(route('profile'));
-    // $response->assertViewIs('auth.profile');
 
   }
 
-  /** @test */
-  public function admins_get_redirected_to_the_admin_area()
-  {
 
-  }
-
-  /** @test */
-  public function regualar_user_connot_access_the_admin_area()
-  {
-
-  }
 
   /** @test */
   public function a_user_can_logout()

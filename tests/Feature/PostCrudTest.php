@@ -75,15 +75,10 @@ class PostCrudTest extends TestCase
      }
 
      /** @test */
-     public function all_the_post_can_be_rendered()
+     public function all_the_posts_can_be_rendered()
      {
-          $posts = Post::factory(10)->make();
-
-          foreach ($posts as $post) {
-
-               $post = $post->attributesToArray();
-               $this->post(route('post.store'), $post);
-          };
+          $this->withoutExceptionHandling();
+         $posts = Post::factory(10, ['img' => 'noImage.jpeg'])->create();
 
           $response = $this->get(route('post.index'));
 

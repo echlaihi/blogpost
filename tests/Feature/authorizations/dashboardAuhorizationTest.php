@@ -11,24 +11,27 @@ class dashboardAuhorizationTest extends TestCase
 {
     use RefreshDatabase;
 
-
     /** @test */
-    public function non_admin_users_cannot_access_the_admin_area()
+    public function admin_can_access_to_admin_panel()
     {
         $this->withoutExceptionHandling();
-        $user = User::factory(['is_admin' => 0])->createOne();
+        $user = User::factory(['is_admin' => 1])->createOne();
         $response = $this->actingAs($user);
-        $response = $response->get(route('admin.dashboard'));
-        $response->assertRedirect(route('dashboard'));
+        $response = $response->get(route('dashboard'));
+        $response->assertOk();
+        $response->assertViewIs('admin.dashboard');
+
     }
 
-    /** @test */
-    public function admin_user_can_login_as_regular_user()
+    /**  @test */
+    public function regular_users_can_access_to_their_profile()
     {
-        $user = User::factory(['is_admin' => 1])->createOne();
+        $user = User::factory(['is_admin' => 0])->createOne();
         $response = $this->actingAs($user);
         $response = $response->get(route('dashboard'));
         $response->assertOk();
         $response->assertViewIs('auth.dashboard');
     }
+
+
 }

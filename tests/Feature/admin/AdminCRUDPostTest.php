@@ -62,9 +62,8 @@ class AdminCRUDPostTest extends TestCase
 
     /** @test
      */
-    public function admin_can_list_all_post()
+    public function admin_can_list_all_posts()
     {
-        $this->withoutExceptionHandling();
         $response = $this->get(route("dashboard.posts"));
         $response->assertOk();
     }

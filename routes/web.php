@@ -19,21 +19,29 @@ use App\Http\Middleware\IsAdminMiddleware;
 |
 */
 
-// Route::get('/', function () {
-//      return view('welcome');
-// });
-
-// the user profile
-Route::get('/dashboard', [DashboardController::class, 'profile'])->middleware('auth')->name('dashboard');
 
 
-Route::get('/profile', [PageController::class, 'profile'])->middleware('auth')->name('profile');
+##########################
+## dashboard routes  #####
+##########################
 
+Route::get('/dashboard',[DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
+Route::get('/dashboard/notifications', [DashboardController::class, 'listNotifications'])->middleware('auth')->name('notifications.list');
+Route::put('/dashboard/notification/{id}/read', [DashboardController::class, 'readNotification'])->middleware('auth')->name('notification.read');
+Route::get('/dashoard/posts', [PostController::class, 'list'])->middleware('auth', 'admin')->name('dashboard.posts');
+
+
+#########################
+#### post routes   ######
+#########################
+
+Route::get('/', [PostController::class, 'index'])->name('post.index');
 
 Route::group(['middleware' => ['auth']], function () {
     
     Route::get('post/create', [PostController::class, 'create'])->name('post.create');
     Route::post('post/store', [PostController::class, 'store'])->name('post.store');
+
 
 });
 
@@ -53,10 +61,14 @@ Route::prefix('/post')->name('post.')->group(function() {
 
 });
 
+
+#####################
+## comment routes ####
+#####################
 Route::get('/comment/{comment}/index', [CommentController::class, 'index'])->name('comment.index');
 Route::post('comment/store', [CommentController::class, 'store'])->name('comment.store');
 
-Route::prefix('/comment/{comment}')->name('comment.')->group(function () {
+Route::prefix('/comment/{comment}')->name('comment.')->group( function () {
     
     Route::delete('/destory', [CommentController::class, 'destory'])->name('destory');
     Route::put('/update', [CommentController::class, 'update'])->name('update');
@@ -64,13 +76,9 @@ Route::prefix('/comment/{comment}')->name('comment.')->group(function () {
 });
 
 
-Route::prefix('/users/')->name('user.')->group(function () {
+// routes for updating users
+Route::prefix('/users/')->name('user.')->group( function () {
 
     Route::post('/{user}/update', [UserController::class, 'update'])->name('update')->middleware(['auth']);
 });
 
-// admin routes
-Route::prefix('/admin/dashboard')->name("admin.")->middleware(['auth', 'admin'])->group(function () {
-
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-});
