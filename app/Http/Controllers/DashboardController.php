@@ -12,11 +12,16 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $num_notifications = User::find(auth()->user()->id)->notifications()->count();
+
         if (!auth()->user()->is_admin){
 
             // return user profile
-            $posts = Post::where('user_id', auth()->user()->id)->paginate();
-            return view('auth.dashboard')->with('posts', $posts);
+            $posts = Post::where('user_id', auth()->user()->id)->paginate(10);
+            return view('auth.dashboard')->with([
+                'num_notifications' => $num_notifications,
+                'posts'             => $posts,
+            ]);
         }
 
         // return admin panel

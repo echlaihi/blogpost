@@ -20,6 +20,11 @@ class Post extends Model
         return Str::substr($this->body, 0,200) . " ...";
     }
 
+    public function getExtraExerpt()
+    {
+        return Str::substr($this->body, 0,50) . " ...";
+    }
+
     public function user()
     {
         return $this->belongsTo('App\Models\User');

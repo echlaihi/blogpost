@@ -145,7 +145,7 @@ class PostController extends Controller
     {
         $this->authorize('manage', $post);
         $post->delete();
-        return redirect(back());
+        return redirect(route('dashboard'));
     }
 
 
