@@ -1,30 +1,15 @@
-<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-    <div class="position-sticky pt-3">
-      <ul class="nav flex-column">
-        <li class="nav-item mt-3">
-          <a class="nav-link" href="#">
-            <span data-feather="file"></span>
-           Posts
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span data-feather="shopping-cart"></span>
-            Users
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span data-feather="users"></span>
-            Comments
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span data-feather="bar-chart-2"></span>
-            Notifications
-          </a>
-        </li>
-       
-      </ul>
-  </nav>
+<div class="list-group">
+  <a href="{{ route('dashboard') }}" class="list-group-item active main-color-bg">
+    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Dashboard
+  </a>
+  <a href="{{ route('dashboard.posts') }}" class="list-group-item">
+    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Publications: <span class="badge">{{ $num_posts }}</span>
+  </a>
+  <a href="{{ route('dashboard.users') }}" class="list-group-item">
+    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Utilisateur: <span class="badge">{{ $num_users }}</span>
+  </a>
+
+  <a href="{{ route('notifications.list') }}" class="list-group-item">
+    <span class="glyphicon glyphicon-bell" aria-hidden="true"></span> Notifications: <span class="badge">{{ $num_notifications }}</span>
+  </a>
+</div>

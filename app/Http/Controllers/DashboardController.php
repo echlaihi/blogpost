@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $num_notifications = User::find(auth()->user()->id)->notifications()->count();
 
         return view('admin.dashboard')->with([
-            'num_user' => $num_users,
+            'num_users' => $num_users,
             'num_comments' => $num_comments,
             'num_posts' => $num_posts,
             'num_notifications'=> $num_notifications, 
@@ -38,8 +38,25 @@ class DashboardController extends Controller
     // this function to list all the notifications
     public function listNotifications()
     {
-        $notifications = User::find(auth()->user()->id)->notifications();
-        return view('auth.notifications')->with('notifications', $notifications);
+        $notifications = User::find(auth()->user()->id)->unReadNotifications;
+        $num_notifications = count(auth()->user()->unReadNotifications);
+
+        if (auth()->user()->is_admin){
+
+                $num_users = User::all()->count();
+                $num_posts = Post::all()->count();
+                // $num_notifications
+
+                return view('admin.notifications')->with([
+                'num_users'     => $num_users,
+                'num_posts'     => $num_posts,
+                'notifications' => $notifications,
+                'num_notifications' => $num_notifications
+            ]);
+
+        }
+
+        return view()->with('auth.notifications', $notifications);
     }
 
     // this function to make a certain notification as read

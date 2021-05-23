@@ -91,7 +91,7 @@ class notificationTest extends TestCase
         $response = $this->post(route('post.store', Post::factory(['img' => 'noImage.jpeg'])->makeOne()->attributesToArray()));
         $notf_id = DatabaseNotification::first()->id;
        
-        $response = $this->put(route('notification.read', $notf_id));
+        $response = $this->get(route('notification.read', $notf_id));
         $this->assertNotNull(DatabaseNotification::find($notf_id)->read_at);
 
     }
@@ -108,7 +108,7 @@ class notificationTest extends TestCase
         
         $new_user = User::factory()->createOne();
         $response = $this->actingAs($new_user);
-        $response = $this->put(route('notification.read', $notf_id));
+        $response = $this->get(route('notification.read', $notf_id));
         $response->assertNotFound();
 
     }
@@ -121,7 +121,7 @@ class notificationTest extends TestCase
         $response = $this->post(route('post.store', Post::factory(['img' => 'noImage.jpeg'])->makeOne()->attributesToArray()));
         $notf_id = 'id';
        
-        $response = $this->put(route('notification.read', $notf_id));
+        $response = $this->get(route('notification.read', $notf_id));
         $response->assertNotFound();
     }
 

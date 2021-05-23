@@ -36,7 +36,7 @@ class PostCreatedNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            "title" => "new Post created", 
+            "title" => "Une nouvelle publication", 
             "post_id" => $this->post->id,
         ];
     }

@@ -27,8 +27,10 @@ use App\Http\Middleware\IsAdminMiddleware;
 
 Route::get('/dashboard',[DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 Route::get('/dashboard/notifications', [DashboardController::class, 'listNotifications'])->middleware('auth')->name('notifications.list');
-Route::put('/dashboard/notification/{id}/read', [DashboardController::class, 'readNotification'])->middleware('auth')->name('notification.read');
-Route::get('/dashoard/posts', [PostController::class, 'list'])->middleware('auth', 'admin')->name('dashboard.posts');
+Route::get('/dashboard/notification/{id}/read', [DashboardController::class, 'readNotification'])->middleware('auth')->name('notification.read');
+Route::get('/dashoard/posts', [PostController::class, 'list'])->middleware(['auth', 'admin'])->name('dashboard.posts');
+Route::get('/dashboard/users', [UserController::class, 'index'])->middleware(['auth', 'admin'])->name('dashboard.users');
+
 
 
 #########################
