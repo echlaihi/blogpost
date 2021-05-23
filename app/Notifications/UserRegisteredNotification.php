@@ -36,6 +36,7 @@ class UserRegisteredNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
+            "title" => 'Nouvau utilisateur a enregistee',
             "email" => $this->user->email,
         ];
     }

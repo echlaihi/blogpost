@@ -1,2 +1,2 @@
-require('./bootstrap');
-require('./twitter-bootstrap.bundle.js');
+import './bootstrap';
+import './twitter-bootstrap.bundle.js';

@@ -61,4 +61,27 @@ class adminCRUDUsersTest extends TestCase
         
     }
 
+    /** @test */
+    public function admin_can_list_all_the_users()
+    {
+        $this->withoutExceptionHandling();
+        $users = User::factory(20)->create();
+        $admin = User::factory(['is_admin' => 1])->create();
+        $response = $this->actingAs($admin);
+        $response = $this->get(route('dashboard.users'));
+        $response->assertOk();
+
+    }
+
+    /** @test */
+    public function non_admin_users_cannot_list_all_the_users()
+    {
+        $users = User::factory(20)->create();
+        $user = User::factory()->create();
+        $response = $this->actingAs($user);
+
+        $response = $this->get(route('dashboard.users'));
+        $response->assertNotFound();
+    }
+
 }

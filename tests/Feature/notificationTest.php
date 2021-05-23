@@ -8,7 +8,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Post;
 use App\Notifications\UserRegisteredNotification;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Notifications\DatabaseNotification;
 
 class notificationTest extends TestCase
 {
@@ -58,7 +58,7 @@ class notificationTest extends TestCase
 
         $post = Post::factory(['user_id' => 2, 'img' => 'noImage.jpeg'])->createOne();
         $comment = array(
-            "body" => "this is the comment body",
+            "body"    => "this is the comment body",
             "post_id" => 1,
         );
 
@@ -68,6 +68,61 @@ class notificationTest extends TestCase
 
         $this->assertCount(1, $post_owner->notifications);
         $this->assertCount(1, $admin->notifications);
+    }
+
+
+    /** @test */
+    public function a_user_can_list_all_to_his_notifications()
+    {
+        $this->withoutExceptionHandling();
+        $user = User::factory()->createOne();
+        $response = $this->actingAs($user);
+        $response = $this->get(route('notifications.list'));
+        $response->assertOk();
+        $response->assertViewIs('auth.notifications');
+    }
+
+    /** @test */
+    public function a_user_can_mark_a_notification_as_read()
+    {
+        $this->withoutExceptionHandling();
+        $admin = User::factory(['is_admin' => 1])->createOne();
+        $response = $this->actingAs($admin);
+        $response = $this->post(route('post.store', Post::factory(['img' => 'noImage.jpeg'])->makeOne()->attributesToArray()));
+        $notf_id = DatabaseNotification::first()->id;
+       
+        $response = $this->get(route('notification.read', $notf_id));
+        $this->assertNotNull(DatabaseNotification::find($notf_id)->read_at);
+
+    }
+
+    /** @test */
+    public function a_user_cannot_mark_a_notification_does_not_belongs_to_him()
+    {
+
+        $admin = User::factory(['is_admin' => 1])->createOne();
+        $response = $this->actingAs($admin);
+        $response = $this->post(route('post.store', Post::factory(['img' => 'noImage.jpeg'])->makeOne()->attributesToArray()));
+        $notf_id = DatabaseNotification::first()->id;
+
+        
+        $new_user = User::factory()->createOne();
+        $response = $this->actingAs($new_user);
+        $response = $this->get(route('notification.read', $notf_id));
+        $response->assertNotFound();
+
+    }
+
+    /** @test */
+    public function the_notification_to_mark_as_read_must_exist()
+    {
+        $admin = User::factory(['is_admin' => 1])->createOne();
+        $response = $this->actingAs($admin);
+        $response = $this->post(route('post.store', Post::factory(['img' => 'noImage.jpeg'])->makeOne()->attributesToArray()));
+        $notf_id = 'id';
+       
+        $response = $this->get(route('notification.read', $notf_id));
+        $response->assertNotFound();
     }
 
 }

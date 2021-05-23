@@ -8,9 +8,20 @@ use App\Models\User;
 use App\Policies\PostPolicy;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\PostCreatedNotification;
+use Illuminate\Notifications\DatabaseNotification;
 
 class PostController extends Controller
 {
+
+    public function list()
+    {
+        $posts = Post::paginate(10);
+        $num_users = User::all()->count();
+        $num_posts = Post::all()->count();
+        $num_notifications = count(auth()->user()->unreadNotifications);
+        return view('admin.tables.posts')->with(['num_notifications' => $num_notifications, 'posts' => $posts, 'num_users' => $num_users, 'num_posts' => $num_posts]);
+
+    }
     /**
      * Display a listing of the post.
      *
@@ -134,7 +145,7 @@ class PostController extends Controller
     {
         $this->authorize('manage', $post);
         $post->delete();
-        return redirect(back());
+        return redirect(route('dashboard'));
     }
 
 
