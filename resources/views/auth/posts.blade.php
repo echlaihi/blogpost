@@ -25,12 +25,23 @@
 
                     <a class="btn btn-sm btn-info mr-2" href="{{ route('post.show', $post->id) }}">Voir</a>
 
-                    <form action="{{ route('post.destory', $post->id) }}" method="post">
+                    <form id="form" action="{{ route('post.destory', $post->id) }}" method="post">
                     
                         @method('DELETE')
                         @csrf
-                        <input type="submit" value="Suprimer" class="btn btn-sm btn-danger">
+                        <input type="button" id="btn" value="Suprimer" class="btn btn-sm btn-danger">
                     </form>
+
+                    <script>
+                        var btn = document.getElementById('btn');
+                        var form = document.getElementById('form');
+                       
+                       btn.addEventListener('click', function () {
+                        if (confirm('Voulez-vous vraiment suprimer cette publication?')){
+                            form.submit();
+                        }
+                       });
+                    </script>
 
                 </td>
             </tr>

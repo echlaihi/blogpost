@@ -19,11 +19,23 @@
 
            <div class="d-flex">
             <a class="btn btn-info mr-3" href="{{ route("post.edit", $post->id) }}">Modifier</a>
-            <form action="{{ route('post.destory', $post->id) }}" method="post">
+            <form id="form" action="{{ route('post.destory', $post->id) }}" method="post">
                 @csrf
                 @method('DELETE')
-                <input type="submit" value="Sumprimer" class="btn btn-danger">
+                <input type="button" value="Sumprimer" class="btn btn-danger" id="btn">
             </form>
+
+            <script>
+
+                var button = document.getElementById('btn');
+                var form = document.getElementById('form');
+                button.addEventListener('click', function (){
+                    if (confirm('voulez-vous vraiment sumprimer cette publication?')){
+                        form.submit();
+                    }
+                });
+
+            </script>
            </div>
             
         @endcan
