@@ -12,7 +12,7 @@
                 @error("title")
                     <div class="alert alert-danger col-12 py-2">{{ $message }}</div>                    
                 @enderror
-                <label for="" class="col-12"><b>Enter the title:</b> </label>
+                <label for="" class="col-12"><b>Enterz le titre:</b> </label>
                 <textarea class="form-control col-12" name="title" id=""rows="1">{{ old("title") ? old("title") : $post->title }}</textarea>
             </fieldset>
 
@@ -21,13 +21,13 @@
                 <div class="alert alert-danger col-12 py-2">{{ $message }}</div>                    
                 @enderror
 
-                <label for="" class="col-12" ><b>Enter the body: </b> </label>
+                <label for="" class="col-12" ><b>Enterz le Corp </b> </label>
                 <textarea name="body" id="" class="form-control col-12" rows="22">{{ old("body") ? old("body") : $post->body }}</textarea>
             </fieldset>
 
             <fieldset class="form-group row">
 
-                <label for="" class=""><b>Shoose an Image: </b></label>
+                <label for="" class=""><b>Choisissez une image </b></label>
 
                 @error("img")
                     <div class="d-block py-1 form-control alert alert-danger">{{ $message  }}</div>
@@ -37,8 +37,8 @@
             </fieldset>
 
             <fieldset class="form-group row">
-                <input type="submit" name="submit" value="Update" class="btn btn-success col-2 mr-2">
-                <a href="{{ route("post.show", $post->id) }}" class="btn btn-info col-2">Go Back</a>
+                <input type="submit" name="submit" value="Modifier" class="btn btn-success col-2 mr-2">
+                <a href="{{ route("post.show", $post->id) }}" class="btn btn-info col-2">Revenir</a>
             </fieldset>
         </form>
 

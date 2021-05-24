@@ -7,7 +7,7 @@
         <article>
 
             @can("manage", $post)
-                <a class="btn btn-info" href="{{ route("post.edit", $post->id) }}">edit</a>
+                <a class="btn btn-info" href="{{ route("post.edit", $post->id) }}">Modifier</a>
             @endcan
 
             <h1 class="py-3     text-center">{{ $post->title }}</h1>
@@ -18,7 +18,7 @@
         @can("manage", $post)
 
            <div class="d-flex">
-            <a class="btn btn-info mr-3" href="{{ route("post.edit", $post->id) }}">edit</a>
+            <a class="btn btn-info mr-3" href="{{ route("post.edit", $post->id) }}">Modifier</a>
             <form action="{{ route('post.destory', $post->id) }}" method="post">
                 @csrf
                 @method('DELETE')

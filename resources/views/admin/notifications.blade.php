@@ -1,4 +1,4 @@
-@extends('admin.layout');
+@extends('admin.layout')
 
 @section('table')
 <div class="panel panel-default">
@@ -14,19 +14,15 @@
         @endif
         @foreach ($notifications as $notification )
 
-            <div class="alert alert-info">
+            <div class="alert alert-info d-flex justify-content-space-between">
 
-                <form class="" method="post" action="{{ route('notification.read', $notification->id) }}">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" name="id">
-                </form>
                 
                 {{ $notification->data['title'] }}
                 
-                @if ($notification->type == 'App\Notifications\PostCreatedNotification')
-                    <a href="{{ route('post.show', $notification->data['post_id']) }}">Voir la Publication</a>
+                  @if ($notification->type == 'App\Notifications\PostCreatedNotification')
+                    <a  class="btn btn-info btn-sm" href="{{ route('post.show', $notification->data['post_id']) }}">Voir la Publication</a>
                 @endif
+                <a class="btn btn-danger btn-sm" href="{{ route('notification.read', $notification->id) }}">marquer come lu</a>
 
             </div>
 
@@ -34,7 +30,6 @@
         @endforeach
         
     </table>
-    {{-- {{ $users->links() }} --}}
 </div>
 </div>
 

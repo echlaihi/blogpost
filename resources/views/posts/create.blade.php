@@ -8,7 +8,7 @@
         <form class="container"  method="post" enctype="multipart/form-data" action="{{ route("post.store") }}">
             @csrf
             <fieldset class="form-group row">
-                <label for="" class="col-12"><b>Enter the title:</b> </label>
+                <label for="" class="col-12"><b>Enterez le titre</b> </label>
                 @error("title")
                     <div class="alert alert-danger col-12 py-2">{{ $message }}</div>                    
                 @enderror
@@ -18,7 +18,7 @@
 
             <fieldset class="form-group row">
                 
-                <label for="" class="col-12" ><b>Enter the body: </b> </label>
+                <label for="" class="col-12" ><b>Enterez le corps </b> </label>
                 @error("body")
                 <div class="alert alert-danger col-12 py-2">{{ $message }}</div>                    
                 @enderror
@@ -27,7 +27,7 @@
 
             <fieldset class="form-group row">
 
-                <label for="" class=""><b>Shoose an Image: </b></label>
+                <label for="" class=""><b>Choisissez une image </b></label>
 
                 @error("img")
                     <div class="d-block py-1 form-control alert alert-danger">{{ $message  }}</div>
@@ -37,7 +37,7 @@
             </fieldset>
 
             <fieldset class="form-group row">
-                <input type="submit" name="submit" value="Save" class="btn btn-success col-2 mr-2">
+                <input type="submit" name="submit" value="Publier" class="btn btn-success col-2 mr-2">
             </fieldset>
         </form>
 

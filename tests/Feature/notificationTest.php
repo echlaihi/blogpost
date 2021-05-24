@@ -48,38 +48,37 @@ class notificationTest extends TestCase
         $this->assertCount(1, $admin->notifications);
     }
 
-    /** @test */
-    public function notify_the_owner_of_the_post_and_admin_when_a_post_commented()
-    {
+    // public function notify_the_owner_of_the_post_and_admin_when_a_post_commented()
+    // {
 
-        $this->withoutExceptionHandling();
-        $admin = User::factory(['is_admin'=> 1])->create();
-        $post_owner = User::factory()->create();
+    //     $this->withoutExceptionHandling();
+    //     $admin = User::factory(['is_admin'=> 1])->create();
+    //     $post_owner = User::factory()->create();
 
-        $post = Post::factory(['user_id' => 2, 'img' => 'noImage.jpeg'])->createOne();
-        $comment = array(
-            "body"    => "this is the comment body",
-            "post_id" => 1,
-        );
+    //     $post = Post::factory(['user_id' => 2, 'img' => 'noImage.jpeg'])->createOne();
+    //     $comment = array(
+    //         "body"    => "this is the comment body",
+    //         "post_id" => 1,
+    //     );
 
-        $response = $this->actingAs($post_owner);
-        $response->post(route('comment.store'), $comment);
+    //     $response = $this->actingAs($post_owner);
+    //     $response->post(route('comment.store'), $comment);
         
 
-        $this->assertCount(1, $post_owner->notifications);
-        $this->assertCount(1, $admin->notifications);
-    }
+    //     $this->assertCount(1, $post_owner->notifications);
+    //     $this->assertCount(1, $admin->notifications);
+    // }
 
 
     /** @test */
-    public function a_user_can_list_all_to_his_notifications()
+    public function a_user_can_list_all_of_his_notifications()
     {
         $this->withoutExceptionHandling();
         $user = User::factory()->createOne();
         $response = $this->actingAs($user);
-        $response = $this->get(route('notifications.list'));
+        $response = $response->get(route('notifications.list'));
         $response->assertOk();
-        $response->assertViewIs('auth.notifications');
+        // $response->dump();
     }
 
     /** @test */

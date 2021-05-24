@@ -17,11 +17,11 @@
 
                    <div class="card-text mx-0">
                        {{ $post->getExerpt() }}
-                       <a href="{{ route("post.show", $post->id) }}">read more &raquo;</a>
+                       <a href="{{ route("post.show", $post->id) }}">Lire plus &raquo;</a>
 
                     </div>
                     @can("manage", $post)
-                    <a href="{{ route("post.edit", $post->id) }}" class="btn btn-sm btn-info">edit</a>
+                    <a href="{{ route("post.edit", $post->id) }}" class="btn btn-sm btn-info">Modifier</a>
                     @endcan
                </div>
 
